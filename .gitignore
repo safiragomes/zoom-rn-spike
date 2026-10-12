@@ -1,0 +1,12 @@
+# Spike isolado — não é parte de nenhum repositório do projeto ValeDOC.
+node_modules
+.env
+.env.local
+transcripts.jsonl
+app/android
+app/ios
+app/.expo
+app/dist
+
+# versão descartada (Expo em branco), mantida só localmente como referência
+app-flat-backup

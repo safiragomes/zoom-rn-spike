@@ -1,0 +1,89 @@
+name: CI
+
+# `main` and `develop` on purpose: derived projects use either, and a workflow
+# that watches only one goes silent without telling anyone.
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly run: exact pins (D8) age silently; this keeps doctor and audit honest.
+    - cron: "0 9 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  EXPO_NO_TELEMETRY: 1
+  OPENSPEC_TELEMETRY: 0
+  EXPO_PUBLIC_API_URL: https://jsonplaceholder.typicode.com
+  EXPO_PUBLIC_ENV: development
+
+jobs:
+  quality:
+    name: Format, lint, types, specs, skills, coverage, and export
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check formatting
+        run: pnpm format:check
+      - name: Lint
+        run: pnpm lint
+      - name: Type-check
+        run: pnpm typecheck
+      - name: Validate OpenSpec
+        run: pnpm spec:validate
+      - name: Check agent skills
+        run: pnpm skills:check
+      - name: Test repository tooling
+        run: pnpm test:tooling
+      # `test:coverage`, not `test`: plain jest ignores coverageThreshold, so R7
+      # would be documented but unenforced.
+      - name: Test with coverage
+        run: pnpm test:coverage
+      - name: Export bundles
+        run: pnpm build
+      # `critical`, not `high`: the high advisories are transitive dependencies
+      # locked by the Expo SDK, React Native, ESLint, and Jest, with no override
+      # that keeps the SDK matrix intact. See D19 for the trigger to raise it.
+      - name: Audit dependencies
+        run: pnpm audit --audit-level critical
+
+  doctor:
+    name: expo-doctor
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # Exact pins (D8) make this the aging alarm for the SDK dependency set.
+      # `pnpm run doctor`, never `pnpm doctor`: the latter is a pnpm built-in
+      # that shadows the script and checks nothing about Expo (D19).
+      - name: Check the SDK dependency set
+        run: pnpm run doctor

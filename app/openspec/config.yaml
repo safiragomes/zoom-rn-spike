@@ -1,0 +1,54 @@
+schema: spec-driven
+
+context: |
+  Expo SDK 57 mobile application (React Native 0.86, React 19, expo-router,
+  NativeWind 4 on Tailwind 3, TypeScript strict) tested with Jest (jest-expo)
+  and React Native Testing Library. pnpm 10 with a hoisted node_modules; Node 24.
+  Targets Android, iOS, and web; Android and web are verifiable locally.
+  Dependencies flow src/app → src/features → src/shared → src/services →
+  src/config. Features are isolated and imported only through their index.ts.
+  Only src/services/http calls fetch. Visual values come from
+  src/styles/tokens.json. EXPO_PUBLIC_* values are public and bundled.
+  Write repository artifacts in English; communicate with people in Brazilian
+  Portuguese. Directories under specs/ and changes/ name a business capability;
+  when a matching feature exists under src/features/<feature>, reuse that exact
+  name. Never group by route, screen, component, or hook name.
+  Every specified scenario must become an automated test before implementation.
+
+rules:
+  proposal:
+    - State the user or operational outcome and explicit non-goals.
+    - Identify navigation and deep-link, API contract, environment, security, privacy, accessibility, and documentation impact.
+    - State whether the change needs a new native build (app.json, config plugins, permissions, native dependencies) or ships as JavaScript only.
+    - Declare in-scope and out-of-scope items.
+
+  specs:
+    - Describe only observable behavior.
+    - Use SHALL or MUST in requirements.
+    - Every requirement must have at least one testable scenario.
+    - Write concrete WHEN/THEN scenarios that can become automated tests.
+    - Include loading, error, empty, offline, permission-denied, and accessibility scenarios when relevant.
+    - Name the platform when behavior differs between Android, iOS, and web.
+    - Do not mention screens, components, hooks, routes, or implementation details.
+
+  design:
+    - Record decisions, rejected alternatives, and trade-offs.
+    - Preserve rules R1–R7 and explain any new native dependency, config plugin, or permission.
+    - Create an ADR when the decision is cross-cutting, hard to reverse, or affects more than one feature.
+
+  tasks:
+    - Organize tasks into SDD, Red, Green, Refactor, and Consolidation phases.
+    - Include an explicit task for the developer to write tests.
+    - Order behavior work as failing test, implementation, refactor, and verification.
+    - Include test execution, typecheck, lint, strict OpenSpec validation, and expo-doctor when dependencies or app.json change.
+
+operations:
+  archive:
+    guidance:
+      - Before archiving, check if docs/changes/<change-id>.md exists.
+      - Create or update docs/changes/<change-id>.md with the objective, change made, validations executed, result, and links to the change.
+      - Evaluate if there was a relevant architectural decision.
+      - If so, create an ADR in docs/adr/ following docs/adr/README.md.
+      - Never create an ADR for local, reversible changes without relevant trade-offs.
+      - Only archive after tests, typecheck, lint, and openspec validate --strict have passed.
+      - Obtain explicit user confirmation immediately before moving the change to the archive. Confirmation of validation warnings or spec synchronization does not count as confirmation to archive.

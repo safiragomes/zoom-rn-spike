@@ -1,0 +1,56 @@
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# generated native folders (CNG)
+/ios
+/android
+
+# Metro
+.metro-health-check*
+
+# tests
+coverage/
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS
+.DS_Store
+*.pem
+Thumbs.db
+
+# env — every variant is local, except the committed example.
+# `.env*.local` alone is not enough: SETUP.md tells you to create a plain
+# `.env`, and that one would have been tracked.
+.env
+.env.*
+!.env.example
+
+# typescript
+*.tsbuildinfo
+
+# Scratch output from setup/reset scripts, at the repository root only.
+# The leading slash is load-bearing: a bare `example` matches at ANY depth and
+# silently swallows `src/features/example/` — the reference feature the docs
+# teach from. It did, and every clone was born without it.
+/example
+
+# generated mirror of .agents/skills/citi-* (see scripts/check-agent-skills.mjs)
+/.claude/skills/citi-*

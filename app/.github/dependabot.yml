@@ -1,0 +1,44 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      development-dependencies:
+        dependency-type: development
+    ignore:
+      # SDK-managed: upgrade together with `pnpm exec expo install --fix` at each
+      # Expo SDK release (D8), never one by one.
+      - dependency-name: "expo"
+      - dependency-name: "expo-*"
+      - dependency-name: "@expo/*"
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "react-native"
+      - dependency-name: "react-native-*"
+      - dependency-name: "jest-expo"
+      - dependency-name: "babel-preset-expo"
+      - dependency-name: "eslint-config-expo"
+      - dependency-name: "@types/react"
+      # Held on purpose; see docs/architecture/decisions.md.
+      - dependency-name: "tailwindcss" # D1
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "nativewind" # D1
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript" # D4
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "eslint" # D5
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "jest" # D14
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/jest" # D14
+        update-types: ["version-update:semver-major"]
+      # A newer CLI regenerates the skills in another format; upgrade deliberately.
+      - dependency-name: "@fission-ai/openspec"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -1,0 +1,73 @@
+{
+  "expo": {
+    "name": "zoom-rn-spike",
+    "slug": "zoom-rn-spike",
+    "scheme": "zoomrnspike",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/icon.png",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.valedoc.spike.zoomrn",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Necessário para enviar vídeo na chamada Zoom.",
+        "NSMicrophoneUsageDescription": "Necessário para enviar áudio na chamada Zoom."
+      }
+    },
+    "android": {
+      "package": "com.valedoc.spike.zoomrn",
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "MODIFY_AUDIO_SETTINGS",
+        "BLUETOOTH",
+        "INTERNET"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "androidStatusBar": {
+      "translucent": true
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#F5F5F5"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 28
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e9b02944-4df7-4813-bc19-7c8054d52bb6"
+      }
+    },
+    "owner": "safira.gomes"
+  }
+}
